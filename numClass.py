@@ -81,7 +81,13 @@ print(x_trainflat[1])
 ################################################################
 
 '''
-
+First we intialize a sequential model which is a type of nerual network where
+we have layers of nodes starting with an input layer and ending with a output 
+layer. Models with many layers are called deep neural networks. Each of our 
+layers are dense layers which mean every node is connected to every node in the 
+next and previous layers. To create a layer we need to pass in the number of nodes
+and an activation function. A activation function is essentially the function that
+determines if that node will fire given some input data. 
 '''
 ##################################################################
 # intialize the model

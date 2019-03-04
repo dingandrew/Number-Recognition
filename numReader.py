@@ -1,19 +1,22 @@
+##################################################################
 import tensorflow as tf
 import tensorflow.keras as keras
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
+###################################################################
 
+
+
+###################################################################
 # Create a VideoCapture object assigned to the correct port (in this case "0")
 # READ MORE: https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_gui/py_video_display/py_video_display.html
 cap = cv2.VideoCapture(0)
 cap.set(4, 28)
 
-
 # Start a loop to repeatedly capture frames and display them
 # READ MORE: https://docs.python.org/3/reference/compound_stmts.html#while
 while (1):
-
 	# Assign 'frame' to a captured frame from VideoCapture object created in line 9
 	# 'ret' is a boolean(True/False statement) that indicates if the frame is ready to be shown
 	ret, frame = cap.read()
@@ -29,17 +32,19 @@ while (1):
 		image = cv2.resize(frame, (28, 28))
 		cv2.imwrite('num.png', image)
 		break
-
 		
 # Make sure to release the camera
 cap.release()
-
 
 # Close all windows
 # READ MORE: https://docs.opencv.org/3.1.0/dc/d2e/tutorial_py_image_display.html?highlight=destroyallwindows
 # READ MORE: https://docs.opencv.org/3.1.0/d7/dfc/group__highgui.html#ga6b7fc1c1a8960438156912027b38f481
 cv2.destroyAllWindows()
+#############################################################################
 
+
+
+#############################################################################
 #path = r'C:\Users\dinga\PycharmProjects\firstOpenCV\venv\Include\num.png'
 path = './num.png'
 image = cv2.imread(path)
@@ -55,11 +60,20 @@ print(image_gray)
 imageNorm = tf.keras.utils.normalize(image_gray, axis=1)
 imageFlatNorm = np.reshape(imageNorm, -1)
 print(imageFlatNorm)
+##############################################################################
 
+
+
+#############################################################################
 new_model = tf.keras.models.load_model('numreader.model')
-#!!!!!!!!!!!!!this doesnt work!!!!!!!!!!!!!!!
-predictions = new_model.predict(imageFlatNorm, steps=1)
 
-print(predictions)
-print(np.argmax(predictions[1]))
+#need to change the shape of the array tob 2D
+#These 2 lines are very hacky probably a better solution
+a = np.zeros(shape=(1,784))
+a[0] = imageFlatNorm
 
+predictions = new_model.predict(a)
+
+print("Probability of each digit: ", predictions)
+print("Predicted number is: ",np.argmax(predictions))
+#############################################################################
