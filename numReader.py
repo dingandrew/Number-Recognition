@@ -2,29 +2,64 @@ import tensorflow as tf
 import tensorflow.keras as keras
 import matplotlib.pyplot as plt
 import numpy as np
+import cv2
+
+# Create a VideoCapture object assigned to the correct port (in this case "0")
+# READ MORE: https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_gui/py_video_display/py_video_display.html
+cap = cv2.VideoCapture(0)
+cap.set(4, 28)
 
 
+# Start a loop to repeatedly capture frames and display them
+# READ MORE: https://docs.python.org/3/reference/compound_stmts.html#while
+while (1):
 
-mnist = tf.keras.datasets.mnist
-(x_train, y_train),(x_test, y_test) = mnist.load_data()
+	# Assign 'frame' to a captured frame from VideoCapture object created in line 9
+	# 'ret' is a boolean(True/False statement) that indicates if the frame is ready to be shown
+	ret, frame = cap.read()
+
+	# Show the image frame
+	# READ MORE: https://docs.opencv.org/3.1.0/dc/d2e/tutorial_py_image_display.html?highlight=imshow
+	cv2.imshow('frame', frame)
+
+	# Show the frame for 1 ms and wait to see if user pressed 'q'
+	# READ MORE: https://docs.opencv.org/2.4/modules/highgui/doc/user_interface.html?highlight=waitkey
+	if cv2.waitKey(1) & 0xFF == ord('y'):
+		# If user presses 'y', take picture exit out of the loop
+		image = cv2.resize(frame, (28, 28))
+		cv2.imwrite('num.png', image)
+		break
+
+		
+# Make sure to release the camera
+cap.release()
 
 
-x_train = tf.keras.utils.normalize(x_train, axis=1)
-x_test = tf.keras.utils.normalize(x_test, axis=1)
+# Close all windows
+# READ MORE: https://docs.opencv.org/3.1.0/dc/d2e/tutorial_py_image_display.html?highlight=destroyallwindows
+# READ MORE: https://docs.opencv.org/3.1.0/d7/dfc/group__highgui.html#ga6b7fc1c1a8960438156912027b38f481
+cv2.destroyAllWindows()
 
+#path = r'C:\Users\dinga\PycharmProjects\firstOpenCV\venv\Include\num.png'
+path = './num.png'
+image = cv2.imread(path)
 
-x_trainflat = tf.keras.utils.normalize(x_train, axis=1).reshape(x_train.shape[0], -1)
-x_testflat = tf.keras.utils.normalize(x_test, axis=1).reshape(x_test.shape[0], -1)
+image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
+cv2.imwrite('numBlackWhite.png', image_gray)
+
+plt.imshow(image_gray, plt.cm.binary)
+plt.show()
+print(image_gray)
+
+imageNorm = tf.keras.utils.normalize(image_gray, axis=1)
+imageFlatNorm = np.reshape(imageNorm, -1)
+print(imageFlatNorm)
 
 new_model = tf.keras.models.load_model('numreader.model')
-predictions = new_model.predict(x_testflat)
+#!!!!!!!!!!!!!this doesnt work!!!!!!!!!!!!!!!
+predictions = new_model.predict(imageFlatNorm, steps=1)
 
 print(predictions)
 print(np.argmax(predictions[1]))
-
-plt.imshow(x_test[1])
-plt.show()
-
-
 

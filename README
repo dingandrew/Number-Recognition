@@ -1,0 +1,14 @@
+Author: Andrew Ding
+Date: 3/2/2019
+
+In the numClass.py file the code is divided by lines of "#########" each code
+section should be a seprate cell when writing in a python notebook.
+
+The purpose of the numClass.py file is to download the dataset an prepare it for
+the neural network. Then we build the neural work and train it using the dataset.
+After we are done training our model, we test it and examine its accuracy.
+
+
+The purpose of the numReader.py file is to load the model we trained in 
+numClass.py, and take images from eithier webcam or zumi which will be 
+processed and fed into the model.   
