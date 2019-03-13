@@ -6,7 +6,7 @@ import numpy as np
 import cv2
 ###################################################################
 
-
+'''
 
 ###################################################################
 # Create a VideoCapture object assigned to the correct port (in this case "0")
@@ -42,7 +42,7 @@ cap.release()
 cv2.destroyAllWindows()
 #############################################################################
 
-
+'''
 
 #############################################################################
 #path = r'C:\Users\dinga\PycharmProjects\firstOpenCV\venv\Include\num.png'
@@ -53,13 +53,32 @@ image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 cv2.imwrite('numBlackWhite.png', image_gray)
 
-plt.imshow(image_gray, plt.cm.binary)
+plt.imshow(image_gray, cmap=plt.cm.binary)
+plt.show()
+print(image_gray)
+
+image_gray = cv2.bitwise_not(image_gray)
+plt.imshow(image_gray, cmap=plt.cm.binary)
+plt.show()
+print(image_gray)
+
+for x in range(0, 28):
+	for y in range(0, 28):
+		if(image_gray[x][y] < 154 ):
+			image_gray[x][y] = 0
+
+cv2.imwrite('numBlackWhite.png', image_gray)
+
+plt.imshow(image_gray, cmap=plt.cm.binary)
 plt.show()
 print(image_gray)
 
 imageNorm = tf.keras.utils.normalize(image_gray, axis=1)
 imageFlatNorm = np.reshape(imageNorm, -1)
 print(imageFlatNorm)
+
+
+
 ##############################################################################
 
 

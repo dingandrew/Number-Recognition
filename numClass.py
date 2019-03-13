@@ -104,7 +104,7 @@ model.compile(optimizer='adam',
 	                    metrics=['accuracy'])
 
 #train the model with data
-model.fit(x_trainflat, y_train, epochs=3)
+model.fit(x_trainflat, y_train, epochs=5)
 
 print(model.summary())
 #################################################################
